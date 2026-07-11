@@ -25,7 +25,7 @@ public class GudangKopi {
         if (c != null) {
             System.out.println("Status: MANTAP!");
         } else {
-            System.out.println("Status: BELEGUG !");
+            System.out.println("Status: YANG BENER BANG!");
         }
         
         java.awt.EventQueue.invokeLater(() -> {

@@ -20,7 +20,7 @@ public class Koneksi {
     public static Connection getKoneksi() {
           if(konek ==null){
             try {
-                //kita menggunakan mysql 8 dan konfigurasi database lewat .env agar ter enkripsi 
+                //kita menggunakan mysql 8 yang kita deploy ke server dan konfigurasi database lewat .env agar ter enkripsi 
                 Dotenv dotenv = Dotenv.load();
                 String url = dotenv.get("DB_URL");
                 String user = dotenv.get("DB_USER");
