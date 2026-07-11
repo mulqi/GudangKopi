@@ -10,7 +10,7 @@ package com.mycompany.gudangkopi.view;
  */
 public class MainFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-    String buttonStyle = "arc: 12; background: null; borderWidth: 0; focusWidth: 0;";
+    String buttonStyle = "arc: 99; background: null; borderWidth: 1; focusWidth: 0;";
 
     /**
      * Creates new form mainFrame
@@ -35,8 +35,8 @@ public class MainFrame extends javax.swing.JFrame {
         btnBarangKeluar.setIconTextGap(10);
         btnLaporan.setIconTextGap(10);
         lblLogo.setIconTextGap(15);
-  
-        lblLogo.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "margin: 20, 15, 20, 15");
+       
+    
         btnKeluar.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, buttonStyle);
         
     //swtich page
@@ -192,14 +192,14 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(sidebarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
-                        .addGap(0, 133, Short.MAX_VALUE)
-                        .addComponent(lblLogo)
-                        .addGap(9, 9, 9))
                     .addComponent(btnKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblLogo)
+                .addGap(31, 31, 31))
         );
         sidebarPanelLayout.setVerticalGroup(
             sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

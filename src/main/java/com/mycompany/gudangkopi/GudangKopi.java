@@ -10,11 +10,12 @@ import java.sql.Connection;
  *
  * @author mulqi
  */
+
 public class GudangKopi {
 
     public static void main(String[] args) {
         try {
-            com.formdev.flatlaf.FlatDarkLaf.setup();
+            com.formdev.flatlaf.FlatIntelliJLaf.setup();
         } catch(Exception ex) {
             System.err.println("Gagal mengaktifkan FlatLaf");
         }
