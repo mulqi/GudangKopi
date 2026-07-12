@@ -10,15 +10,23 @@ package com.mycompany.gudangkopi.view;
  */
 public class MainFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-    String buttonStyle = "arc: 99; background: null; borderWidth: 1; focusWidth: 0;";
+    String buttonStyle = "arc: 99; background: null; borderWidth: 1; focusWidth: 0; borderColor: #fff;";
+    private final dashboard pageDashBoard;
 
     /**
      * Creates new form mainFrame
      */
-    public MainFrame() {
-    initComponents();
+    public MainFrame() {  
     
-    try {
+    initComponents();
+        this.pageDashBoard = new com.mycompany.gudangkopi.view.dashboard();
+        
+        contentPanel.add(this.pageDashBoard, "dashboard");
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        
+   //load icon
+    try {    
         btnDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/dashboard.png")));
         btnBarangMasuk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/brgmasuk.png")));
         btnBarangKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/brgkeluar.png")));
@@ -26,19 +34,19 @@ public class MainFrame extends javax.swing.JFrame {
         btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/keluar.png")));
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/logo.png")));    
         } catch (Exception e) {
-            System.err.println("Gagal memuat ikon: " + e.getMessage());
+            System.err.println("Gagal memuat aset: " + e.getMessage());         
+       
           }
-    
+     
     // jarak antar icon dan teks 
         btnDashboard.setIconTextGap(10);
         btnBarangMasuk.setIconTextGap(10);
         btnBarangKeluar.setIconTextGap(10);
         btnLaporan.setIconTextGap(10);
         lblLogo.setIconTextGap(15);
-       
-    
+  
         btnKeluar.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, buttonStyle);
-        
+              
     //swtich page
         pindahHalaman(btnDashboard, "dashboard"); // ini halaman pertama nya ya bang
 
@@ -93,7 +101,6 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         contentPanel = new javax.swing.JPanel();
-        pageDashBoard = new com.mycompany.gudangkopi.view.dashboard();
         pageBarangMasuk = new com.mycompany.gudangkopi.view.barangMasuk();
         pageBarangKeluar = new com.mycompany.gudangkopi.view.barangKeluar();
         pageLaporan = new com.mycompany.gudangkopi.view.laporan();
@@ -111,9 +118,7 @@ public class MainFrame extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(947, 600));
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
-        contentPanel.setPreferredSize(new java.awt.Dimension(600, 600));
         contentPanel.setLayout(new java.awt.CardLayout());
-        contentPanel.add(pageDashBoard, "dashboard");
         contentPanel.add(pageBarangMasuk, "barang_masuk");
         contentPanel.add(pageBarangKeluar, "barang_keluar");
         contentPanel.add(pageLaporan, "Laporan");
@@ -121,14 +126,15 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
 
         sidebarPanel.setBackground(new java.awt.Color(33, 44, 62));
-        sidebarPanel.setPreferredSize(new java.awt.Dimension(324, 0));
+        sidebarPanel.setPreferredSize(new java.awt.Dimension(345, 0));
 
         menuPanel.setBackground(new java.awt.Color(33, 44, 62));
+        menuPanel.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         menuPanel.setPreferredSize(new java.awt.Dimension(200, 100));
         menuPanel.setLayout(new java.awt.GridLayout(0, 1, 0, 4));
 
         btnDashboard.setBackground(new java.awt.Color(33, 44, 62));
-        btnDashboard.setFont(new java.awt.Font("Roboto Slab", 0, 18)); // NOI18N
+        btnDashboard.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         btnDashboard.setForeground(new java.awt.Color(255, 255, 255));
         btnDashboard.setText("Dashboard");
         btnDashboard.setBorder(null);
@@ -140,7 +146,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnDashboard);
 
         btnBarangMasuk.setBackground(new java.awt.Color(33, 44, 62));
-        btnBarangMasuk.setFont(new java.awt.Font("Roboto Slab", 0, 18)); // NOI18N
+        btnBarangMasuk.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         btnBarangMasuk.setForeground(new java.awt.Color(255, 255, 255));
         btnBarangMasuk.setText("Barang Masuk");
         btnBarangMasuk.setBorder(null);
@@ -152,7 +158,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnBarangMasuk);
 
         btnBarangKeluar.setBackground(new java.awt.Color(33, 44, 62));
-        btnBarangKeluar.setFont(new java.awt.Font("Roboto Slab", 0, 18)); // NOI18N
+        btnBarangKeluar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         btnBarangKeluar.setForeground(new java.awt.Color(255, 255, 255));
         btnBarangKeluar.setText("Barang Keluar");
         btnBarangKeluar.setBorder(null);
@@ -163,7 +169,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnBarangKeluar);
 
         btnLaporan.setBackground(new java.awt.Color(33, 44, 62));
-        btnLaporan.setFont(new java.awt.Font("Roboto Slab", 0, 18)); // NOI18N
+        btnLaporan.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         btnLaporan.setForeground(new java.awt.Color(255, 255, 255));
         btnLaporan.setText("Laporan Transaksi");
         btnLaporan.setBorder(null);
@@ -179,7 +185,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnKeluar.setText("Keluar");
         btnKeluar.addActionListener(this::btnKeluarActionPerformed);
 
-        lblLogo.setFont(new java.awt.Font("Roboto Slab", 0, 14)); // NOI18N
+        lblLogo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblLogo.setForeground(new java.awt.Color(255, 255, 255));
         lblLogo.setText("Gudang Kopi Pak Parman");
 
@@ -189,30 +195,33 @@ public class MainFrame extends javax.swing.JFrame {
         sidebarPanel.setLayout(sidebarPanelLayout);
         sidebarPanelLayout.setHorizontalGroup(
             sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                    .addComponent(btnKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
             .addGroup(sidebarPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jSeparator1)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblLogo)
-                .addGap(31, 31, 31))
+                .addGap(38, 38, 38))
         );
         sidebarPanelLayout.setVerticalGroup(
             sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidebarPanelLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(21, 21, 21)
                 .addComponent(lblLogo)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                 .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addGap(45, 45, 45))
         );
 
         getContentPane().add(sidebarPanel, java.awt.BorderLayout.WEST);
@@ -270,7 +279,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel menuPanel;
     private com.mycompany.gudangkopi.view.barangKeluar pageBarangKeluar;
     private com.mycompany.gudangkopi.view.barangMasuk pageBarangMasuk;
-    private com.mycompany.gudangkopi.view.dashboard pageDashBoard;
     private com.mycompany.gudangkopi.view.laporan pageLaporan;
     private javax.swing.JPanel sidebarPanel;
     // End of variables declaration//GEN-END:variables

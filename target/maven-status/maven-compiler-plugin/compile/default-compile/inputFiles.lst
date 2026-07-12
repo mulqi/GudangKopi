@@ -1,5 +1,9 @@
 /media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/GudangKopi.java
 /media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/config/Koneksi.java
+/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/controller/BarangController.java
+/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/controller/InventarisKopiController.java
+/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/model/InventarisKopi.java
+/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/view/FormEditBarang.java
 /media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/view/MainFrame.java
 /media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/view/barangKeluar.java
 /media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/java/com/mycompany/gudangkopi/view/barangMasuk.java
