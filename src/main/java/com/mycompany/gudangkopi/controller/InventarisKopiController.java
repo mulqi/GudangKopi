@@ -4,7 +4,6 @@
  */
 package com.mycompany.gudangkopi.controller;
 
-import com.mycompany.gudangkopi.config.Koneksi;
 import com.mycompany.gudangkopi.model.InventarisKopi;
 import java.sql.*;
 import java.util.ArrayList;

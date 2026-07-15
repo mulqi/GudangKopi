@@ -14,7 +14,7 @@ import java.util.List;
  * @author mulqi
  */
 
-public class dashboard extends javax.swing.JPanel {
+public final class dashboard extends javax.swing.JPanel {
 
     private final com.mycompany.gudangkopi.controller.BarangController controller = new com.mycompany.gudangkopi.controller.BarangController();
     private final com.mycompany.gudangkopi.controller.InventarisKopiController kopiController = new com.mycompany.gudangkopi.controller.InventarisKopiController();
@@ -24,10 +24,11 @@ public class dashboard extends javax.swing.JPanel {
      */
     public dashboard() {
         initComponents();
-        
         this.setLayout(new java.awt.BorderLayout(20, 20));
         this.setBackground(new java.awt.Color(245, 247, 251)); 
-        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 30, 25, 30)); 
+        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 30, 25, 30));
+        
+        this.removeAll();
         
         txtDashboard.setFont(new java.awt.Font("Segoe UI", 1, 22));
         txtDashboard.setForeground(new java.awt.Color(33, 44, 62));
@@ -39,9 +40,9 @@ public class dashboard extends javax.swing.JPanel {
         javax.swing.JPanel rowKartuPanel = new javax.swing.JPanel(new java.awt.GridLayout(1, 3, 20, 0));
         rowKartuPanel.setOpaque(false);
         
-        rowKartuPanel.add(buatUlangKartu(jLabel6, jLabel5, txtTotalStok, jPanel2));           
-        rowKartuPanel.add(buatUlangKartu(jLabel8, jLabel3, lblTotalBarangMasuk, jPanel6));      
-        rowKartuPanel.add(buatUlangKartu(jLabel4, jLabel1, lblTotalBarangKeluar, jPanel5));     
+        rowKartuPanel.add(Card(jLabel6, jLabel5, txtTotalStok, jPanel2));           
+        rowKartuPanel.add(Card(jLabel8, jLabel3, lblTotalBarangMasuk, jPanel6));      
+        rowKartuPanel.add(Card(jLabel4, jLabel1, lblTotalBarangKeluar, jPanel5));     
         
         mainContainer.add(rowKartuPanel, java.awt.BorderLayout.NORTH);
         
@@ -49,6 +50,7 @@ public class dashboard extends javax.swing.JPanel {
         tableContainer.setBackground(java.awt.Color.WHITE);
         tableContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         tableContainer.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "arc: 16;"); 
+        
         
         javax.swing.JPanel tableHeaderPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
         tableHeaderPanel.setOpaque(false);
@@ -90,7 +92,7 @@ public class dashboard extends javax.swing.JPanel {
         this.repaint();
     }
 
-    private javax.swing.JPanel buatUlangKartu(javax.swing.JLabel borderLabel, javax.swing.JLabel titleLabel, javax.swing.JLabel valueLabel, javax.swing.JPanel iconPanel) {
+    private javax.swing.JPanel Card(javax.swing.JLabel borderLabel, javax.swing.JLabel titleLabel, javax.swing.JLabel valueLabel, javax.swing.JPanel iconPanel) {
         javax.swing.JPanel kartu = new javax.swing.JPanel(new java.awt.BorderLayout(15, 0));
         kartu.setBackground(java.awt.Color.WHITE);
         kartu.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20));
@@ -446,10 +448,12 @@ public class dashboard extends javax.swing.JPanel {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1440, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1)
+                        .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jLabel10))))
+                        .addComponent(jLabel10)))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,7 +500,8 @@ public class dashboard extends javax.swing.JPanel {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(80, 80, 80)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1)
+                        .addGap(233, 233, 233))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(jLabel10))))
@@ -514,6 +519,15 @@ public class dashboard extends javax.swing.JPanel {
         tampilkanTotalBarangKeluar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void refreshDashboardData() {
+        tampilkanTotalStokBarang();
+        tampilkanTotalBarangMasuk();
+        tampilkanTotalBarangKeluar();
+        loadDataTabel();
+        
+        this.revalidate();
+        this.repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

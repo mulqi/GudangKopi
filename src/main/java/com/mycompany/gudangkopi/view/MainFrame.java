@@ -11,7 +11,6 @@ package com.mycompany.gudangkopi.view;
 public class MainFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
     String buttonStyle = "arc: 99; background: null; borderWidth: 1; focusWidth: 0; borderColor: #fff;";
-    private final dashboard pageDashBoard;
 
     /**
      * Creates new form mainFrame
@@ -19,9 +18,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {  
     
     initComponents();
-        this.pageDashBoard = new com.mycompany.gudangkopi.view.dashboard();
-        
-        contentPanel.add(this.pageDashBoard, "dashboard");
+    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);   
         contentPanel.revalidate();
         contentPanel.repaint();
         
@@ -101,9 +98,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         contentPanel = new javax.swing.JPanel();
-        pageBarangMasuk = new com.mycompany.gudangkopi.view.barangMasuk();
+        pageDashBoard = new com.mycompany.gudangkopi.view.dashboard();
         pageBarangKeluar = new com.mycompany.gudangkopi.view.barangKeluar();
         pageLaporan = new com.mycompany.gudangkopi.view.laporan();
+        pageBarangMasuk = new com.mycompany.gudangkopi.view.barangMasuk();
         sidebarPanel = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         btnDashboard = new javax.swing.JButton();
@@ -119,9 +117,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
         contentPanel.setLayout(new java.awt.CardLayout());
-        contentPanel.add(pageBarangMasuk, "barang_masuk");
+        contentPanel.add(pageDashBoard, "dashboard");
         contentPanel.add(pageBarangKeluar, "barang_keluar");
         contentPanel.add(pageLaporan, "Laporan");
+        contentPanel.add(pageBarangMasuk, "barang_masuk");
 
         getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
 
@@ -218,8 +217,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
                 .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45))
         );
@@ -279,6 +278,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel menuPanel;
     private com.mycompany.gudangkopi.view.barangKeluar pageBarangKeluar;
     private com.mycompany.gudangkopi.view.barangMasuk pageBarangMasuk;
+    private com.mycompany.gudangkopi.view.dashboard pageDashBoard;
     private com.mycompany.gudangkopi.view.laporan pageLaporan;
     private javax.swing.JPanel sidebarPanel;
     // End of variables declaration//GEN-END:variables
