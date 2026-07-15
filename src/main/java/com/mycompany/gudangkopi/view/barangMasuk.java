@@ -54,9 +54,7 @@ public class barangMasuk extends javax.swing.JPanel {
             
             if (btnDetail != null) btnDetail.addActionListener(e -> tampilkanDetail());
       
-            if (btnCari != null && kpencarian != null) {
-                btnCari.addActionListener(e -> eksekusiPencarian());
-            }
+           setupSearchListener();
             
     }
     
@@ -110,8 +108,30 @@ public class barangMasuk extends javax.swing.JPanel {
         
         tblmasuk.setBorder(BorderFactory.createEmptyBorder());
     }
+    
+    private void setupSearchListener() {
+    if (kpencarian != null) {
+        kpencarian.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void lakukanPencarian() {
+                String keyword = kpencarian.getText().trim();
+                if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
+                    cb.tampilkanData(modelTabel);
+                } else {
+                    cb.cariBarangMasuk(modelTabel, keyword); 
+                }
+            }
 
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
 
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
+        });
+    }
+}
 
     private void setupTableStyle() {
         tblMasuk.setRowHeight(40); 
@@ -245,16 +265,7 @@ public class barangMasuk extends javax.swing.JPanel {
             dash.refreshDashboardData(); 
         }
     }
-    
-    private void eksekusiPencarian() {
-        String keyword = kpencarian.getText().trim();
-            if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH")) {
-                cb.tampilkanData(modelTabel);
-            } else {
-                cb.cariBarangMasuk(modelTabel, keyword);
-            }
-    }
-    
+        
     private void tampilkanDetail() {
         int baris = tblMasuk.getSelectedRow();
 
@@ -558,15 +569,13 @@ public class barangMasuk extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addComponent(lbljudull, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                        .addGap(441, 441, 441)
+                        .addGap(388, 388, 388)
                         .addComponent(btnInputBarangMasuk))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(34, 34, 34))
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
@@ -592,7 +601,7 @@ public class barangMasuk extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbljudull, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInputBarangMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnInputBarangMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(116, 116, 116))
@@ -636,12 +645,14 @@ public class barangMasuk extends javax.swing.JPanel {
     }//GEN-LAST:event_btnhapusActionPerformed
 
     private void btnInputBarangMasukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputBarangMasukActionPerformed
-        // TODO add your handling code here:
-        InputBarangMasukDialog dialog = new InputBarangMasukDialog(
-            javax.swing.SwingUtilities.getWindowAncestor(this), 
-            cb
-        );
-        dialog.setVisible(true);
+     // TODO add your handling code here:
+          InputBarangMasukDialog dialog = new InputBarangMasukDialog(
+              javax.swing.SwingUtilities.getWindowAncestor(this), 
+              cb
+            );
+          
+          dialog.setVisible(true);
+
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel); 
             triggerDashboardRefresh();    
@@ -650,7 +661,6 @@ public class barangMasuk extends javax.swing.JPanel {
 
     private void kpencarianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kpencarianActionPerformed
         // TODO add your handling code here:
-       eksekusiPencarian();
     }//GEN-LAST:event_kpencarianActionPerformed
 
     private void btnubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnubahActionPerformed
@@ -760,8 +770,8 @@ public class barangMasuk extends javax.swing.JPanel {
             setMinimumSize(new Dimension(350, 250));
         }
 
-        private void simpanData() {
-            java.util.Date tanggal;
+       private void simpanData() {
+        java.util.Date tanggal;
             try {
                 tanggal = new SimpleDateFormat("yyyy-MM-dd").parse(txtTanggal.getText().trim());
             } catch (ParseException ex) {
@@ -769,30 +779,38 @@ public class barangMasuk extends javax.swing.JPanel {
                 return;
             }
 
-            String gradeKopi = (cmbGradeKopi.getSelectedItem() != null) ? cmbGradeKopi.getSelectedItem().toString() : "";
-            String supplier = txtSupplier.getText().trim();
-            String status = (String) cmbStatus.getSelectedItem();
+                String gradeKopi = (cmbGradeKopi.getSelectedItem() != null) ? cmbGradeKopi.getSelectedItem().toString() : "";
+                String supplier = txtSupplier.getText().trim();
+                String status = (String) cmbStatus.getSelectedItem();
 
             if (gradeKopi.isEmpty() || supplier.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Grade Kopi dan Nama Supplier tidak boleh kosong", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            String jumlah = txtJumlah.getText().trim();
+                String jumlah = txtJumlah.getText().trim();
+                
             if (jumlah.isEmpty()) {
                  JOptionPane.showMessageDialog(this, "Jumlah tidak boleh kosong", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
-             }
+            }
+
+            try {
+                Integer.parseInt(jumlah);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Jumlah harus berupa angka valid!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             ModelBarangMasuk barang = new ModelBarangMasuk(0, tanggal, gradeKopi, jumlah, supplier, status);
             boolean berhasil = controller.tambahBarangMasuk(barang);
 
             if (berhasil) {
-                dataTersimpan = true;
+                this.dataTersimpan = true; 
                 JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
-                dispose();
+                this.dispose(); 
             } else {
-                JOptionPane.showMessageDialog(this, "Gagal menyimpan data.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Gagal menyimpan data ke database.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
