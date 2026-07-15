@@ -26,7 +26,6 @@ public class BarangMasukController {
             listGrade.add(rs.getString("grade_name"));
         }
     } catch (SQLException e) {
-        e.printStackTrace();
     }
     return listGrade;
 }
@@ -52,7 +51,7 @@ public class BarangMasukController {
                 rs.getInt("id_transaksi"),
                 rs.getDate("tanggal"),
                 rs.getString("grade_kopi"),
-                rs.getString("jumlah"),   // <- pakai String dulu
+                rs.getString("jumlah"),  
                 rs.getString("nama_supplier"),
                 rs.getString("status")
             };
@@ -64,13 +63,14 @@ public class BarangMasukController {
         e.printStackTrace();
     }
 }
+    
     public boolean tambahBarangMasuk(ModelBarangMasuk barang) {
-     String cariGradeSql = "SELECT id FROM coffee_grades WHERE grade_name = ?";
+        
+        String cariGradeSql = "SELECT id FROM coffee_grades WHERE grade_name = ?";
         String insertGradeSql = "INSERT INTO coffee_grades (grade_name, stock, price_per_kg) VALUES (?, 0, 0)";
         String insertTransaksiSql = "INSERT INTO coffee_transactions "
                 + "(transaction_date, coffee_grade_id, quantity, transaction_type, party_name, status) "
                 + "VALUES (?, ?, ?, 'MASUK', ?, ?)";
-        String updateStokSql = "UPDATE coffee_grades SET stock = stock + ? WHERE id = ?";
 
         Connection conn = null;
         try {
@@ -108,16 +108,7 @@ public class BarangMasukController {
                 ps.executeUpdate();
             }
 
-     
-            if (barang.getstatus().equalsIgnoreCase("Selesai")) {
-                try (PreparedStatement psStok = conn.prepareStatement(updateStokSql)) {
-                    psStok.setInt(1, jumlahInput);
-                    psStok.setInt(2, gradeId);
-                    psStok.executeUpdate();
-                }
-            }
-
-            conn.commit(); // SIMPAN SEMUA DATA
+            conn.commit(); 
             return true;
 
         } catch (SQLException | NumberFormatException e) {
@@ -138,7 +129,8 @@ public class BarangMasukController {
             }
         }
     }
-   public boolean ubahStatusBarangMasuk(int idTransaksi, String statusBaru, String JumlahBaruStr) {
+    
+    public boolean ubahStatusBarangMasuk(int idTransaksi, String statusBaru, String JumlahBaruStr) {
 
         String sqlGetLama = "SELECT coffee_grade_id, quantity, status FROM coffee_transactions WHERE id = ? AND transaction_type = 'MASUK'";
         String sqlUpdateTrans = "UPDATE coffee_transactions SET status = ?, quantity = ? WHERE id = ? AND transaction_type = 'MASUK'";
@@ -187,7 +179,7 @@ public class BarangMasukController {
        
             try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdateTrans)) {
                 psUpdate.setString(1, statusBaru);
-                psUpdate.setInt(2, JumlahBaru); // Tetap aman dieksekusi sebagai int ke DB
+                psUpdate.setInt(2, JumlahBaru); 
                 psUpdate.setInt(3, idTransaksi);
                 psUpdate.executeUpdate();
             }
@@ -232,20 +224,28 @@ public class BarangMasukController {
 
     public boolean hapusBarangMasuk(int idTransaksi) {
 
-    String sql = "DELETE FROM coffee_transactions WHERE id = ? AND transaction_type = 'MASUK'";
-
-    try (Connection conn = Koneksi.getKoneksi();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-        ps.setInt(1, idTransaksi);
-
-        return ps.executeUpdate() > 0;
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, e.getMessage());
-        e.printStackTrace();
-        return false;
-    }
+    String sqlDelete = "DELETE FROM coffee_transactions WHERE id = ? AND transaction_type = 'MASUK'";
+    
+        Connection conn = null;
+        try {
+            conn = Koneksi.getKoneksi();
+            try (PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
+                ps.setInt(1, idTransaksi);
+                int rowsDeleted = ps.executeUpdate();
+                return rowsDeleted > 0; 
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal menghapus data: " + e.getMessage());
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 }
 
 
