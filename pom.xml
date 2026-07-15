@@ -11,6 +11,12 @@
         <exec.mainClass>com.mycompany.gudangkopi.GudangKopi</exec.mainClass>
     </properties>  
    <dependencies>
+          <dependency>
+             <groupId>com.toedter</groupId>
+             <artifactId>jcalendar</artifactId>
+             <version>1.4</version>
+         </dependency>
+         
          <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
