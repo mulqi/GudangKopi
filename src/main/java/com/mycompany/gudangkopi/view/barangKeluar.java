@@ -8,8 +8,6 @@ import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import com.mycompany.gudangkopi.controller.BarangKeluarController;
 import com.mycompany.gudangkopi.model.ModelBarangKeluar;
@@ -23,6 +21,7 @@ public class barangKeluar extends javax.swing.JPanel {
     com.mycompany.gudangkopi.controller.BarangKeluarController cb = new com.mycompany.gudangkopi.controller.BarangKeluarController();
     DefaultTableModel modelTabel;
     private dashboard dash;
+    private javax.swing.Timer searchTimerKeluar;
 
     /**
      * Creates new form barangKeluar
@@ -52,11 +51,8 @@ public class barangKeluar extends javax.swing.JPanel {
                         System.err.println("Gagal memuat data awal di design mode: " + e.getMessage());
                     }
                 }
-            
-            if (btnDetail != null) btnDetail.addActionListener(e -> tampilkanDetail());
-            
+                    
             setupSearchListener();
-      
     }
     
     private void applyFlatLafStyles() {
@@ -116,32 +112,34 @@ public class barangKeluar extends javax.swing.JPanel {
         if (jSeparator1 != null) {
             jSeparator1.setForeground(new Color(226, 232, 240));
         }
+        
     }
     
     private void setupTableStyle() {
         if (tblKeluar == null) return;
         
-        tblKeluar.setRowHeight(40); 
+        tblKeluar.setRowHeight(44); 
         tblKeluar.setShowHorizontalLines(true);
-        tblKeluar.setShowVerticalLines(true); 
+        tblKeluar.setShowVerticalLines(false); 
         
-        Color gridColor = new Color(225, 230, 238); 
+        Color gridColor = new Color(241, 245, 249); 
         tblKeluar.setGridColor(gridColor);
-        tblKeluar.setIntercellSpacing(new java.awt.Dimension(1, 1));
         tblKeluar.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        tblKeluar.setSelectionBackground(new Color(239, 246, 255)); 
+        tblKeluar.setSelectionForeground(new Color(29, 78, 216)); 
         
         javax.swing.table.JTableHeader header = tblKeluar.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 13)); 
-        header.setBackground(Color.WHITE);
-        header.setForeground(new Color(33, 44, 62)); 
+        header.setBackground(new Color(248, 250, 252));
+        header.setForeground(new Color(71, 85, 105)); 
         header.setOpaque(true);
-        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, gridColor));
-        header.putClientProperty("FlatLaf.style", "separatorColor: #e1e6ee;");
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(226, 232, 240)));
         
-        if (tblkeluar != null) {
+        if (tblkeluar != null) { 
             tblkeluar.setOpaque(false);
             tblkeluar.getViewport().setOpaque(false);
-            tblkeluar.setBorder(BorderFactory.createLineBorder(new java.awt.Color(240, 240, 240), 1));
+            tblkeluar.setBorder(BorderFactory.createEmptyBorder());
         }
         
         if (jPanel1 != null) {
@@ -155,70 +153,58 @@ public class barangKeluar extends javax.swing.JPanel {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setHorizontalAlignment(SwingConstants.CENTER); 
+                
+                if (column == 2 || column == 4) { 
+                    setHorizontalAlignment(SwingConstants.LEFT);
+                } else {
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                }
                 
                 if (!isSelected) {
-                    if (row % 2 == 0) {
-                        c.setBackground(Color.WHITE);
-                    } else {
-                        c.setBackground(new Color(244, 246, 249));
-                    }
-                    c.setForeground(new Color(51, 51, 51));
-                } else {
-                    c.setBackground(table.getSelectionBackground());
-                    c.setForeground(table.getSelectionForeground());
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
+                    c.setForeground(new Color(51, 65, 85));
                 }
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                 return c;
             }
         });
 
         tblKeluar.getColumnModel().getColumn(5).setCellRenderer(new javax.swing.table.TableCellRenderer() {
             private final JLabel labelText = new JLabel("", SwingConstants.CENTER);
-            private final JPanel panelBadge = new JPanel(new java.awt.GridBagLayout()) {
-                @Override
-                protected void paintComponent(java.awt.Graphics g) {
-                    super.paintComponent(g);
-                    java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                    g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                    
-                    String statusText = labelText.getText().toUpperCase();
-                    if (statusText.equals("SELESAI") || statusText.contains("NORMAL")) {
-                        g2.setColor(new Color(16, 171, 119)); 
-                    } else if (statusText.equals("PENDING") || statusText.equals("PROSES") || statusText.contains("RENDAH")) {
-                        g2.setColor(new Color(217, 131, 12));  
-                    } else {
-                        g2.setColor(new Color(219, 68, 85));   
-                    }
-                    
-                    int badgeHeight = getHeight() - 14;
-                    int badgeWidth = getWidth() - 30; 
-                    int x = (getWidth() - badgeWidth) / 2;
-                    int y = (getHeight() - badgeHeight) / 2;
-                    
-                    g2.fillRoundRect(x, y, badgeWidth, badgeHeight, badgeHeight, badgeHeight);
-                    g2.dispose();
-                }
-            };
+            private final JPanel panelBadge = new JPanel(new java.awt.BorderLayout());
 
             {
-                labelText.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-                labelText.setForeground(java.awt.Color.WHITE);
-                panelBadge.add(labelText);
+                labelText.setOpaque(true);
+                labelText.setHorizontalAlignment(SwingConstants.CENTER);
+                labelText.putClientProperty("FlatLaf.style", "arc: 12; font: bold 11 Segoe UI;"); 
+                panelBadge.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+                panelBadge.add(labelText, BorderLayout.CENTER);
             }
 
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                String status = (value != null) ? value.toString() : "";
-                labelText.setText(status.toUpperCase()); 
-           
                 if (!isSelected) {
-                    if (row % 2 == 0) {
-                        panelBadge.setBackground(Color.WHITE);
-                    } else {
-                        panelBadge.setBackground(new Color(244, 246, 249));
-                    }
+                    panelBadge.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
                 } else {
                     panelBadge.setBackground(table.getSelectionBackground());
+                }
+
+                if (value != null) {
+                    String status = value.toString().trim().toUpperCase();
+                    labelText.setText(status);
+
+                    if (status.equals("SELESAI") || status.equals("MASUK")) {
+                        labelText.setBackground(new Color(220, 252, 231)); 
+                        labelText.setForeground(new Color(21, 128, 61));
+                    } else if (status.equals("DITOLAK") || status.equals("KELUAR")) {
+                        labelText.setBackground(new Color(254, 226, 226)); 
+                        labelText.setForeground(new Color(185, 28, 28));
+                    } else {
+                        labelText.setBackground(new Color(254, 243, 199));
+                        labelText.setForeground(new Color(180, 83, 9));
+                    }
+                } else {
+                    labelText.setText("");
                 }
                 return panelBadge;
             }
@@ -226,28 +212,39 @@ public class barangKeluar extends javax.swing.JPanel {
     }
     
     private void setupSearchListener() {
-        if (Cari != null) {
-            Cari.getDocument().addDocumentListener(new DocumentListener() {
-                private void lakukanPencarian() {
-                    String keyword = Cari.getText().trim();
-                    if (keyword.isEmpty() || keyword.equals("Search...")) {
-                        cb.tampilkanData(modelTabel);
-                    } else {
-                        cb.cariBarangKeluar(modelTabel, keyword);
-                    }
+    if (Cari != null) {
+        Cari.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void pemicuPencarian() {
+                if (searchTimerKeluar != null && searchTimerKeluar.isRunning()) {
+                    searchTimerKeluar.stop();
                 }
 
-                @Override
-                public void insertUpdate(DocumentEvent e) { lakukanPencarian(); }
+                searchTimerKeluar = new javax.swing.Timer(200, new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent e) {
+                        String keyword = Cari.getText().trim();
+                        if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
+                            cb.tampilkanData(modelTabel);
+                        } else {
+                            cb.cariBarangKeluar(modelTabel, keyword);
+                        }
+                    }
+                });
+                searchTimerKeluar.setRepeats(false);
+                searchTimerKeluar.start();
+            }
 
-                @Override
-                public void removeUpdate(DocumentEvent e) { lakukanPencarian(); }
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
 
-                @Override
-                public void changedUpdate(DocumentEvent e) { lakukanPencarian(); }
-            });
-        }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
+        });
     }
+}
     
     public void setDashboard(dashboard dash) {
     this.dash = dash;
@@ -275,12 +272,14 @@ public class barangKeluar extends javax.swing.JPanel {
         }
     }
     
-    private void tampilkanDetail() {
+     private void tampilkanDetail() {
         int baris = tblKeluar.getSelectedRow();
 
         if (baris == -1) {
             JOptionPane.showMessageDialog(this,
-                    "Pilih data yang ingin dilihat detailnya!");
+                    "Pilih data yang ingin dilihat detailnya!",
+                    "Informasi",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -288,21 +287,129 @@ public class barangKeluar extends javax.swing.JPanel {
         String tanggal = String.valueOf(modelTabel.getValueAt(baris, 1));
         String gradeKopi = String.valueOf(modelTabel.getValueAt(baris, 2));
         String jumlah = String.valueOf(modelTabel.getValueAt(baris, 3));
-        String pembeli = String.valueOf(modelTabel.getValueAt(baris, 4));
+        String supplier = String.valueOf(modelTabel.getValueAt(baris, 4));
         String status = String.valueOf(modelTabel.getValueAt(baris, 5));
 
-        String pesan = "ID Transaksi   : " + idTransaksi + "\n"
-                + "Tanggal        : " + tanggal + "\n"
-                + "Grade Kopi     : " + gradeKopi + "\n"
-                + "Jumlah         : " + jumlah + "\n"
-                + "Tujuan Pembeli : " + pembeli + "\n"
-                + "Status         : " + status;
+        Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+        JDialog detailDialog = new JDialog(parentWindow, "Detail Transaksi", Dialog.ModalityType.APPLICATION_MODAL);
+        detailDialog.setResizable(false);
 
-        JOptionPane.showMessageDialog(
-                this,
-                pesan,
-                "Detail Barang Keluar",
-                JOptionPane.INFORMATION_MESSAGE);
+        JPanel panelUtama = new JPanel(new BorderLayout(0, 20));
+        panelUtama.setBackground(Color.WHITE);
+        panelUtama.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+
+        JPanel panelHeader = new JPanel(new GridLayout(2, 1, 0, 4));
+        panelHeader.setOpaque(false);
+        JLabel lblSub = new JLabel("INFORMASI BARANG KELUAR");
+        lblSub.setFont(new Font("Segoe UI", Font.BOLD, 10));
+        lblSub.setForeground(new Color(148, 163, 184));
+        
+        JLabel lblTitle = new JLabel("Transaksi #" + idTransaksi);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTitle.setForeground(new Color(33, 44, 62)); 
+        panelHeader.add(lblSub);
+        panelHeader.add(lblTitle);
+        panelUtama.add(panelHeader, BorderLayout.NORTH);
+
+        JPanel panelGrid = new JPanel(new GridBagLayout());
+        panelGrid.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(8, 0, 8, 10); 
+
+        String[][] dataInfo = {
+            {"Tanggal Keluar", tanggal},
+            {"Grade Kopi", gradeKopi},
+            {"Jumlah Masuk", jumlah + " Kg"},
+            {"Nama Supplier", supplier}
+        };
+
+        Font fontLabel = new Font("Segoe UI", Font.PLAIN, 13);
+        Color colorLabel = new Color(100, 116, 139);
+        Font fontValue = new Font("Segoe UI", Font.BOLD, 13);
+        Color colorValue = new Color(51, 65, 85); 
+
+        for (int i = 0; i < dataInfo.length; i++) {
+            gbc.gridx = 0; gbc.gridy = i; gbc.weightx = 0.3;
+            JLabel lbl = new JLabel(dataInfo[i][0]);
+            lbl.setFont(fontLabel);
+            lbl.setForeground(colorLabel);
+            panelGrid.add(lbl, gbc);
+
+            gbc.gridx = 1; gbc.weightx = 0.05;
+            JLabel lblTitikDua = new JLabel(":");
+            lblTitikDua.setFont(fontLabel);
+            lblTitikDua.setForeground(colorLabel);
+            panelGrid.add(lblTitikDua, gbc);
+
+            gbc.gridx = 2; gbc.weightx = 0.65;
+            JLabel val = new JLabel(dataInfo[i][1]);
+            val.setFont(fontValue);
+            val.setForeground(colorValue);
+            panelGrid.add(val, gbc);
+        }
+
+        gbc.gridx = 0; gbc.gridy = dataInfo.length; gbc.weightx = 0.3;
+        JLabel lblStatus = new JLabel("Status");
+        lblStatus.setFont(fontLabel);
+        lblStatus.setForeground(colorLabel);
+        panelGrid.add(lblStatus, gbc);
+
+        gbc.gridx = 1; gbc.weightx = 0.05;
+        JLabel lblTitikStatus = new JLabel(":");
+        lblTitikStatus.setFont(fontLabel);
+        lblTitikStatus.setForeground(colorLabel);
+        panelGrid.add(lblTitikStatus, gbc);
+
+        gbc.gridx = 2; gbc.weightx = 0.65;
+        final String statusUpper = status.toUpperCase();
+        JPanel dialogBadge = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                if (statusUpper.equals("SELESAI") || statusUpper.contains("NORMAL")) {
+                    g2.setColor(new Color(16, 171, 119)); 
+                } else if (statusUpper.equals("PENDING") || statusUpper.equals("PROSES") || statusUpper.contains("RENDAH")) {
+                    g2.setColor(new Color(245, 158, 11)); 
+                } else {
+                    g2.setColor(new Color(219, 68, 85)); 
+                }
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+                g2.dispose();
+            }
+        };
+        dialogBadge.setBorder(BorderFactory.createEmptyBorder(3, 14, 4, 14));
+        JLabel txtStatus = new JLabel(statusUpper);
+        txtStatus.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        txtStatus.setForeground(Color.WHITE);
+        dialogBadge.add(txtStatus);
+        
+        JPanel containerBadge = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        containerBadge.setOpaque(false);
+        containerBadge.add(dialogBadge);
+        panelGrid.add(containerBadge, gbc);
+
+        panelUtama.add(panelGrid, BorderLayout.CENTER);
+
+        JButton btnTutup = new JButton("Tutup");
+        btnTutup.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
+            "arc: 8; background: #f1f5f9; foreground: #334155; borderWidth: 0; font: bold 12 SansSerif; focusWidth: 0;");
+        btnTutup.setPreferredSize(new Dimension(80, 32));
+        btnTutup.addActionListener(e -> detailDialog.dispose());
+
+        JPanel panelTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        panelTombol.setOpaque(false);
+        panelTombol.add(btnTutup);
+        panelUtama.add(panelTombol, BorderLayout.SOUTH);
+
+        detailDialog.setContentPane(panelUtama);
+        detailDialog.pack();
+        detailDialog.setSize(380, detailDialog.getHeight());
+        detailDialog.setLocationRelativeTo(this);
+        detailDialog.setVisible(true);
     }
 
     /**
@@ -340,7 +447,7 @@ public class barangKeluar extends javax.swing.JPanel {
         Cari.addActionListener(this::CariActionPerformed);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
 
         tblKeluar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -380,7 +487,7 @@ public class barangKeluar extends javax.swing.JPanel {
                     .addComponent(tblkeluar)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                         .addComponent(btnUbah)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDetail)
@@ -398,7 +505,7 @@ public class barangKeluar extends javax.swing.JPanel {
                     .addComponent(btnUbah)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(tblkeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(tblkeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
@@ -414,22 +521,21 @@ public class barangKeluar extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addComponent(Cari, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCari)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
-                        .addGap(308, 308, 308)
-                        .addComponent(btnInputBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(42, 42, 42))))
+                .addGap(40, 40, 40)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(40, 40, 40))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addGap(317, 317, 317)
+                .addComponent(btnInputBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -444,16 +550,15 @@ public class barangKeluar extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInputBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(99, 99, 99))
+                .addGap(50, 50, 50)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
         // TODO add your handling code here:
         String keyword = Cari.getText().trim();
-
         if (keyword.isEmpty()) {
             cb.tampilkanData(modelTabel);
         } else {
@@ -477,36 +582,21 @@ public class barangKeluar extends javax.swing.JPanel {
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
         int baris = tblKeluar.getSelectedRow();
-
         if (baris == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Pilih data yang akan dihapus!");
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int id = Integer.parseInt(tblKeluar.getValueAt(baris, 0).toString());
-
-        int konfirmasi = JOptionPane.showConfirmDialog(
-                this,
-                "Yakin ingin menghapus data ini?",
-                "Konfirmasi",
-                JOptionPane.YES_NO_OPTION);
+        int konfirmasi = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus data ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
 
         if (konfirmasi == JOptionPane.YES_OPTION) {
-
             if (cb.hapusBarangKeluar(id)) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Data berhasil dihapus.");
-
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
                 cb.tampilkanData(modelTabel);
                 triggerDashboardRefresh();
-
             } else {
-
-                JOptionPane.showMessageDialog(this,
-                        "Data gagal dihapus.");
-
+                JOptionPane.showMessageDialog(this, "Data gagal dihapus.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnHapusActionPerformed
@@ -518,7 +608,6 @@ public class barangKeluar extends javax.swing.JPanel {
 
     private void CariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CariActionPerformed
         String keyword = Cari.getText().trim();
-
         if (keyword.isEmpty()) {
             cb.tampilkanData(modelTabel);
         } else {

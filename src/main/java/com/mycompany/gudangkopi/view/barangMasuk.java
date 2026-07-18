@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  *
@@ -21,6 +22,7 @@ public class barangMasuk extends javax.swing.JPanel {
     com.mycompany.gudangkopi.controller.BarangMasukController cb = new com.mycompany.gudangkopi.controller.BarangMasukController();
     DefaultTableModel modelTabel;
     private dashboard dash;
+    private javax.swing.Timer searchTimer;
 
     /**
      * Creates new form barangMasuk
@@ -39,201 +41,225 @@ public class barangMasuk extends javax.swing.JPanel {
                     return false;
                 }
             };
+            
             if (tblMasuk != null) {
                 tblMasuk.setModel(modelTabel);
                 setupTableStyle();
             }
             
             if (cb != null && modelTabel != null) {
-                    try {
-                        cb.tampilkanData(modelTabel);
-                    } catch (Exception e) {
-                        System.err.println("Gagal memuat data awal di design mode: " + e.getMessage());
-                    }
+                try {
+                    cb.tampilkanData(modelTabel);
+                } catch (Exception e) {
+                    System.err.println("Gagal memuat data awal di design mode: " + e.getMessage());
                 }
+            }
             
-            if (btnDetail != null) btnDetail.addActionListener(e -> tampilkanDetail());
-      
-           setupSearchListener();
+            if (btnDetail != null) {
+                btnDetail.addActionListener(e -> tampilkanDetail());
+            }
             
+            setupSearchListener();
     }
     
     private void applyFlatLafStyle() {
+        if (tblMasuk == null) return;
+
+        if (tblMasuk.getParent() instanceof javax.swing.JViewport viewport) {
+            if (viewport.getParent() instanceof javax.swing.JScrollPane scrollPane) {
+                
+                scrollPane.setBorder(BorderFactory.createEmptyBorder());
+                scrollPane.setViewportBorder(null);
+                scrollPane.setBackground(Color.WHITE);
+                viewport.setBackground(Color.WHITE);
+                
+                scrollPane.putClientProperty(FlatClientProperties.STYLE, "border: 0,0,0,0;");
+            }
+        }
+        
+        tblMasuk.setRowHeight(42);
+        tblMasuk.setShowHorizontalLines(true);
+        tblMasuk.setShowVerticalLines(false);
+        
         Color bgLight = new Color(245, 247, 250);
         this.setBackground(bgLight);
 
-        panelKontrolUtara.setBackground(bgLight);
-        panelKontrolUtara.setOpaque(false);
-        
-        lbljudull.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 22));
-        lbljudull.setForeground(new Color(33, 44, 62));
-        
-        lbltransaksi.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 13));
-        lbltransaksi.setForeground(new Color(120, 130, 140));
-        
-        if (kpencarian.getText().equals("SEARCH")) {
-            kpencarian.setText(""); 
+        if (panelKontrolUtara != null) {
+            panelKontrolUtara.setBackground(bgLight);
+            panelKontrolUtara.setOpaque(false);
         }
-        kpencarian.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
         
-        JPanel iconWrapper = new JPanel(new BorderLayout());
-        iconWrapper.setOpaque(false);
+        if (lbljudull != null) {
+            lbljudull.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 22));
+            lbljudull.setForeground(new Color(33, 44, 62));
+        }
         
-        JLabel lblIcon = new JLabel(new com.formdev.flatlaf.icons.FlatSearchIcon());
+        if (lbltransaksi != null) {
+            lbltransaksi.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 13));
+            lbltransaksi.setForeground(new Color(120, 130, 140));
+        }
         
-        lblIcon.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 5)); 
-        iconWrapper.add(lblIcon, BorderLayout.CENTER);
-      
-        kpencarian.putClientProperty("JTextField.leadingComponent", iconWrapper);
-        
-        kpencarian.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
-            "arc: 20; " +                  
-            "borderColor: #e2e8f0; " +
-            "focusedBorderColor: #cbd5e1; " +
-            "background: #ffffff; " +
-            "margin: 6,4,6,12; " +   
-            "focusWidth: 1;");
+        if (kpencarian != null) {
+            if (kpencarian.getText().equalsIgnoreCase("SEARCH")) {
+                kpencarian.setText(""); 
+            }
+            kpencarian.putClientProperty(com.formdev.flatlaf.FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
+            
+            JPanel iconWrapper = new JPanel(new BorderLayout());
+            iconWrapper.setOpaque(false);
+            
+            JLabel lblIcon = new JLabel(new com.formdev.flatlaf.icons.FlatSearchIcon());
+            lblIcon.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 5)); 
+            iconWrapper.add(lblIcon, BorderLayout.CENTER);
+          
+            kpencarian.putClientProperty("JTextField.leadingComponent", iconWrapper);
+            
+            kpencarian.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
+                "arc: 20; " +                  
+                "borderColor: #e2e8f0; " +
+                "focusedBorderColor: #cbd5e1; " +
+                "background: #ffffff; " +
+                "margin: 6,4,6,12; " +   
+                "focusWidth: 1;");
+        }
         
         if (btnCari != null) {
             btnCari.setVisible(false);
         }
         
-        btnInputBarangMasuk.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
-            "arc: 6; background: #1e293b; foreground: #ffffff; borderWidth: 0; font: bold 12 SansSerif; focusWidth: 0;");
+        if (btnInputBarangMasuk != null) {
+            btnInputBarangMasuk.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
+                "arc: 6; background: #1e293b; foreground: #ffffff; borderWidth: 0; font: bold 12 SansSerif; focusWidth: 0;");
+        }
         
         String actionBtnStyle = "arc: 6; background: #ffffff; foreground: #334155; borderWidth: 1; borderColor: #e2e8f0; font: 12 SansSerif; focusWidth: 0;";
         if (btnubah != null) btnubah.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, actionBtnStyle);
         if (btnDetail != null) btnDetail.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, actionBtnStyle);
         if (btnhapus != null) btnhapus.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "arc: 6; background: #fff5f5; foreground: #ef4444; borderWidth: 1; borderColor: #fecaca; font: 12 SansSerif; focusWidth: 0;");
         
-        tblmasuk.setBorder(BorderFactory.createEmptyBorder());
+        if (tblMasuk != null) {
+            tblMasuk.setBorder(BorderFactory.createEmptyBorder());
+        }
     }
     
     private void setupSearchListener() {
-    if (kpencarian != null) {
-        kpencarian.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            private void lakukanPencarian() {
-                String keyword = kpencarian.getText().trim();
-                if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
-                    cb.tampilkanData(modelTabel);
-                } else {
-                    cb.cariBarangMasuk(modelTabel, keyword); 
+        if (kpencarian != null) {
+            kpencarian.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+                private void pemicuPencarian() {
+                    if (searchTimer != null && searchTimer.isRunning()) {
+                        searchTimer.stop();
+                    }
+                    
+                    searchTimer = new javax.swing.Timer(200, new java.awt.event.ActionListener() {
+                        @Override
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                            String keyword = kpencarian.getText().trim();
+                            if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
+                                cb.tampilkanData(modelTabel); 
+                            } else {
+                                cb.cariBarangMasuk(modelTabel, keyword); 
+                            }
+                        }
+                    });
+                    searchTimer.setRepeats(false); 
+                    searchTimer.start();
                 }
-            }
 
-            @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
+                @Override
+                public void insertUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
 
-            @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
+                @Override
+                public void removeUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
 
-            @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { lakukanPencarian(); }
-        });
+                @Override
+                public void changedUpdate(javax.swing.event.DocumentEvent e) { pemicuPencarian(); }
+            });
+        }
     }
-}
 
     private void setupTableStyle() {
-        tblMasuk.setRowHeight(40); 
+       
+        if (tblMasuk == null) return; 
+
+        tblMasuk.setRowHeight(44); 
         tblMasuk.setShowHorizontalLines(true);
-        tblMasuk.setShowVerticalLines(true); 
+        tblMasuk.setShowVerticalLines(false); 
         
-        Color gridColor = new Color(225, 230, 238); 
+        Color gridColor = new Color(241, 245, 249);
         tblMasuk.setGridColor(gridColor);
-        tblMasuk.setIntercellSpacing(new java.awt.Dimension(1, 1));
-        
         tblMasuk.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        tblMasuk.setSelectionBackground(new Color(239, 246, 255)); 
+        tblMasuk.setSelectionForeground(new Color(29, 78, 216));   
         
         javax.swing.table.JTableHeader header = tblMasuk.getTableHeader();
         header.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 13)); 
-        header.setBackground(Color.WHITE);
-        header.setForeground(new Color(33, 44, 62)); 
+        header.setBackground(new Color(248, 250, 252)); 
+        header.setForeground(new Color(71, 85, 105));   
         header.setOpaque(true);
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(226, 232, 240)));
         
-        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, gridColor));
-        header.putClientProperty("FlatLaf.style", "separatorColor: #e1e6ee;");
-        
-        if (tblmasuk != null) {
+        if (tblmasuk != null) { 
             tblmasuk.setOpaque(false);
             tblmasuk.getViewport().setOpaque(false);
-            tblmasuk.setBorder(BorderFactory.createLineBorder(new java.awt.Color(240, 240, 240), 1));
-        }
-        
-        if (jPanel1 != null) {
-            jPanel1.setBackground(Color.WHITE);
-            jPanel1.setOpaque(true);
-            jPanel1.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "arc: 16;");
-            jPanel1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            tblmasuk.setBorder(BorderFactory.createEmptyBorder());
         }
 
         tblMasuk.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setHorizontalAlignment(SwingConstants.CENTER); 
+                
+                if (column == 2 || column == 4) { 
+                    setHorizontalAlignment(SwingConstants.LEFT); 
+                } else {
+                    setHorizontalAlignment(SwingConstants.CENTER); 
+                }
                 
                 if (!isSelected) {
-                    if (row % 2 == 0) {
-                        c.setBackground(Color.WHITE);
-                    } else {
-                        c.setBackground(new Color(244, 246, 249));
-                    }
-                    c.setForeground(new Color(51, 51, 51));
-                } else {
-                    c.setBackground(table.getSelectionBackground());
-                    c.setForeground(table.getSelectionForeground());
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
+                    c.setForeground(new Color(51, 65, 85));
                 }
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
                 return c;
             }
         });
-
         tblMasuk.getColumnModel().getColumn(5).setCellRenderer(new javax.swing.table.TableCellRenderer() {
             private final JLabel labelText = new JLabel("", SwingConstants.CENTER);
-            private final JPanel panelBadge = new JPanel(new java.awt.GridBagLayout()) {
-                @Override
-                protected void paintComponent(java.awt.Graphics g) {
-                    super.paintComponent(g);
-                    java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                    g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                    
-                    String statusText = labelText.getText().toUpperCase();
-                    if (statusText.equals("SELESAI") || statusText.contains("NORMAL")) {
-                        g2.setColor(new Color(16, 171, 119)); 
-                    } else if (statusText.equals("PENDING") || statusText.equals("PROSES") || statusText.contains("RENDAH")) {
-                        g2.setColor(new Color(217, 131, 12));  
-                    } else {
-                        g2.setColor(new Color(219, 68, 85));   
-                    }
-                    
-                    int badgeHeight = getHeight() - 14;
-                    int badgeWidth = getWidth() - 30; 
-                    int x = (getWidth() - badgeWidth) / 2;
-                    int y = (getHeight() - badgeHeight) / 2;
-                    
-                    g2.fillRoundRect(x, y, badgeWidth, badgeHeight, badgeHeight, badgeHeight);
-                    g2.dispose();
-                }
-            };
+            private final JPanel panelBadge = new JPanel(new java.awt.BorderLayout());
 
             {
-                labelText.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-                labelText.setForeground(java.awt.Color.WHITE);
-                panelBadge.add(labelText);
+                labelText.setOpaque(true);
+                labelText.setHorizontalAlignment(SwingConstants.CENTER);
+                labelText.putClientProperty("FlatLaf.style", "arc: 12; font: bold 11 Segoe UI;"); 
+                panelBadge.setBorder(BorderFactory.createEmptyBorder(8, 25, 8, 25));
+                panelBadge.add(labelText, BorderLayout.CENTER);
             }
 
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                String status = (value != null) ? value.toString() : "";
-                labelText.setText(status.toUpperCase()); 
-           
                 if (!isSelected) {
-                    if (row % 2 == 0) {
-                        panelBadge.setBackground(Color.WHITE);
-                    } else {
-                        panelBadge.setBackground(new Color(244, 246, 249));
-                    }
+                    panelBadge.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
                 } else {
                     panelBadge.setBackground(table.getSelectionBackground());
+                }
+
+                if (value != null) {
+                    String status = value.toString().trim().toUpperCase();
+                    labelText.setText(status);
+
+                    if (status.equals("MASUK") || status.equals("SELESAI")) {
+                        labelText.setBackground(new Color(220, 252, 231)); 
+                        labelText.setForeground(new Color(21, 128, 61));  
+                    } else if (status.equals("KELUAR") || status.equals("DITOLAK")) {
+                        labelText.setBackground(new Color(254, 226, 226)); 
+                        labelText.setForeground(new Color(185, 28, 28));  
+                    } else {
+                        labelText.setBackground(new Color(254, 243, 199));
+                        labelText.setForeground(new Color(180, 83, 9));    
+                    }
+                } else {
+                    labelText.setText("");
                 }
                 return panelBadge;
             }
@@ -241,11 +267,11 @@ public class barangMasuk extends javax.swing.JPanel {
     }
     
     public void setDashboard(dashboard dash) {
-    this.dash = dash;
+        this.dash = dash;
     }
     
     private void triggerDashboardRefresh() {
-      if (dash == null) {
+        if (dash == null) {
             java.awt.Container parent = this.getParent();
             while (parent != null) {
                 if (parent instanceof javax.swing.JComponent) {
@@ -512,8 +538,10 @@ public class barangMasuk extends javax.swing.JPanel {
         kpencarian.addActionListener(this::kpencarianActionPerformed);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setOpaque(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(558, 305));
 
+        tblmasuk.setBorder(null);
         tblmasuk.setViewportView(tblMasuk);
 
         lbltransaksi.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -560,7 +588,7 @@ public class barangMasuk extends javax.swing.JPanel {
                         .addComponent(btnubah))
                     .addComponent(lbltransaksi))
                 .addGap(30, 30, 30)
-                .addComponent(tblmasuk, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addComponent(tblmasuk, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -568,23 +596,26 @@ public class barangMasuk extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbljudull, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                        .addGap(388, 388, 388)
-                        .addComponent(btnInputBarangMasuk))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(34, 34, 34))
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelKontrolUtara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(kpencarian, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCari)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelKontrolUtara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(lbljudull, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                        .addComponent(btnInputBarangMasuk))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE)))
+                .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,9 +633,9 @@ public class barangMasuk extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbljudull, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInputBarangMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(116, 116, 116))
+                .addGap(31, 31, 31)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                .addGap(24, 24, 24))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -612,8 +643,7 @@ public class barangMasuk extends javax.swing.JPanel {
         int baris = tblMasuk.getSelectedRow();
 
         if (baris == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Pilih data yang akan dihapus!");
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus!");
             return;
         }
 
@@ -626,20 +656,12 @@ public class barangMasuk extends javax.swing.JPanel {
                 JOptionPane.YES_NO_OPTION);
 
         if (konfirmasi == JOptionPane.YES_OPTION) {
-
             if (cb.hapusBarangMasuk(id)) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Data berhasil dihapus.");
-
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
                 cb.tampilkanData(modelTabel);
                 triggerDashboardRefresh();
-
             } else {
-
-                JOptionPane.showMessageDialog(this,
-                        "Data gagal dihapus.");
-
+                JOptionPane.showMessageDialog(this, "Data gagal dihapus.");
             }
         }
     }//GEN-LAST:event_btnhapusActionPerformed
@@ -651,7 +673,7 @@ public class barangMasuk extends javax.swing.JPanel {
               cb
             );
           
-          dialog.setVisible(true);
+         dialog.setVisible(true);
 
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel); 

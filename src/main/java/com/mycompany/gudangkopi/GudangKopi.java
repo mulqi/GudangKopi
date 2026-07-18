@@ -16,7 +16,7 @@ public class GudangKopi {
     public static void main(String[] args) {
         try {
             System.setProperty("flatlaf.uiScale", "1x");
-            com.formdev.flatlaf.FlatIntelliJLaf.setup();
+            com.formdev.flatlaf.FlatLightLaf.setup();
         } catch(Exception ex) {
             System.err.println("Gagal mengaktifkan FlatLaf");
         }

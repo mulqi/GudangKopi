@@ -8,6 +8,9 @@ package com.mycompany.gudangkopi.view;
 import com.mycompany.gudangkopi.model.InventarisKopi;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.awt.*;
+import javax.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  *
@@ -24,62 +27,9 @@ public final class dashboard extends javax.swing.JPanel {
      */
     public dashboard() {
         initComponents();
-        this.setLayout(new java.awt.BorderLayout(20, 20));
-        this.setBackground(new java.awt.Color(245, 247, 251)); 
-        this.setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 30, 25, 30));
         
-        this.removeAll();
-        
-        txtDashboard.setFont(new java.awt.Font("Segoe UI", 1, 22));
-        txtDashboard.setForeground(new java.awt.Color(33, 44, 62));
-        this.add(txtDashboard, java.awt.BorderLayout.NORTH);
-        
-        javax.swing.JPanel mainContainer = new javax.swing.JPanel(new java.awt.BorderLayout(0, 25));
-        mainContainer.setOpaque(false);
-     
-        javax.swing.JPanel rowKartuPanel = new javax.swing.JPanel(new java.awt.GridLayout(1, 3, 20, 0));
-        rowKartuPanel.setOpaque(false);
-        
-        rowKartuPanel.add(Card(jLabel6, jLabel5, txtTotalStok, jPanel2));           
-        rowKartuPanel.add(Card(jLabel8, jLabel3, lblTotalBarangMasuk, jPanel6));      
-        rowKartuPanel.add(Card(jLabel4, jLabel1, lblTotalBarangKeluar, jPanel5));     
-        
-        mainContainer.add(rowKartuPanel, java.awt.BorderLayout.NORTH);
-        
-        javax.swing.JPanel tableContainer = new javax.swing.JPanel(new java.awt.BorderLayout(15, 15));
-        tableContainer.setBackground(java.awt.Color.WHITE);
-        tableContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        tableContainer.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "arc: 16;"); 
-        
-        
-        javax.swing.JPanel tableHeaderPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
-        tableHeaderPanel.setOpaque(false);
-        
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 16));
-        jLabel10.setForeground(new java.awt.Color(33, 44, 62));
-        tableHeaderPanel.add(jLabel10, java.awt.BorderLayout.WEST);
-        
-        jButton1.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, 
-            "arc: 8; background: #2064E1; foreground: #ffffff; borderWidth: 0; focusWidth: 0; font: bold 14 SansSerif;");
-        jButton1.setPreferredSize(new java.awt.Dimension(120, 35));
-        tableHeaderPanel.add(jButton1, java.awt.BorderLayout.EAST);
-        
-        tableContainer.add(tableHeaderPanel, java.awt.BorderLayout.NORTH);
-       
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 240, 240), 1));
-        jScrollPane1.setOpaque(false);
-        jScrollPane1.getViewport().setOpaque(false);
-        
-        tblBarang.setRowHeight(35);
-        tblBarang.getTableHeader().setFont(new java.awt.Font("Segoe UI", 1, 13));
-        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 13));
-        
-        tableContainer.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-        
-        mainContainer.add(tableContainer, java.awt.BorderLayout.CENTER);
-        this.add(mainContainer, java.awt.BorderLayout.CENTER);
-        
-        jLabel11.setVisible(false);
+        initResponsifLayout();
+        applyFlatLafStyles();
         
         if (!java.beans.Beans.isDesignTime()) {
             tampilkanTotalStokBarang();
@@ -87,34 +37,115 @@ public final class dashboard extends javax.swing.JPanel {
             tampilkanTotalBarangKeluar();
             loadDataTabel();
         }
+    }
+    
+    private void applyFlatLafStyles() {
+        Color bgLight = new Color(248, 250, 252); // Slate 50
+        this.setBackground(bgLight);
+        
+        if (txtDashboard != null) {
+            txtDashboard.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 24));
+            txtDashboard.setForeground(new Color(15, 23, 42)); // Slate 900
+            txtDashboard.setText("Dashboard - Manajemen Stok");
+        }
+        
+        if (jButton1 != null) {
+            jButton1.putClientProperty(FlatClientProperties.STYLE, 
+                "arc: 8; " +
+                "background: #3b82f6; " + 
+                "foreground: #ffffff; " +
+                "borderWidth: 0; " +
+                "font: bold 13 Segoe UI; " +
+                "focusWidth: 0; " +
+                "hoverBackground: #2563eb;");
+        }
+    }
+    
+    private void initResponsifLayout() {
+        this.removeAll();
+        this.setLayout(new BorderLayout(0, 24));
+        this.setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
+      
+        JPanel northWrapper = new JPanel();
+        northWrapper.setOpaque(false);
+        northWrapper.setLayout(new BoxLayout(northWrapper, BoxLayout.Y_AXIS));
+        
+        txtDashboard.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        northWrapper.add(txtDashboard);
+        this.add(northWrapper, BorderLayout.NORTH);
+        
+        JPanel mainContainer = new JPanel(new BorderLayout(0, 24));
+        mainContainer.setOpaque(false);
+        
+        JPanel rowKartuPanel = new JPanel(new GridLayout(1, 3, 20, 0));
+        rowKartuPanel.setOpaque(false);
+        
+        rowKartuPanel.add(Card("Total Stok Keseluruhan", txtTotalStok, jPanel2));           
+        rowKartuPanel.add(Card("Total Barang Masuk", lblTotalBarangMasuk, jPanel6));      
+        rowKartuPanel.add(Card("Total Barang Keluar", lblTotalBarangKeluar, jPanel5));     
+        
+        mainContainer.add(rowKartuPanel, BorderLayout.NORTH);
+        
+        JPanel tableContainer = new JPanel(new BorderLayout(0, 16));
+        tableContainer.setBackground(Color.WHITE);
+        tableContainer.setOpaque(true);
+        tableContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        tableContainer.putClientProperty(FlatClientProperties.STYLE, "arc: 16; background: #ffffff;");
+        
+        JPanel tableHeaderPanel = new JPanel(new BorderLayout());
+        tableHeaderPanel.setOpaque(false);
+        
+        jLabel10.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 16));
+        jLabel10.setForeground(new Color(15, 23, 42));
+        jLabel10.setText("Data Struktur Inventaris Saat Ini");
+        tableHeaderPanel.add(jLabel10, BorderLayout.WEST);
+        
+        jButton1.setPreferredSize(new Dimension(100, 36));
+        tableHeaderPanel.add(jButton1, BorderLayout.EAST);
+        
+        tableContainer.add(tableHeaderPanel, BorderLayout.NORTH);
+       
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
+        jScrollPane1.setOpaque(false);
+        jScrollPane1.getViewport().setOpaque(false);
+        
+        tableContainer.add(jScrollPane1, BorderLayout.CENTER);
+        mainContainer.add(tableContainer, BorderLayout.CENTER);
+        
+        this.add(mainContainer, BorderLayout.CENTER);
+        
+        jLabel6.setVisible(false);
+        jLabel8.setVisible(false);
+        jLabel4.setVisible(false);
+        jLabel11.setVisible(false);
         
         this.revalidate();
         this.repaint();
     }
-
-    private javax.swing.JPanel Card(javax.swing.JLabel borderLabel, javax.swing.JLabel titleLabel, javax.swing.JLabel valueLabel, javax.swing.JPanel iconPanel) {
-        javax.swing.JPanel kartu = new javax.swing.JPanel(new java.awt.BorderLayout(15, 0));
-        kartu.setBackground(java.awt.Color.WHITE);
-        kartu.setBorder(javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20));
-        kartu.putClientProperty(com.formdev.flatlaf.FlatClientProperties.STYLE, "arc: 12;"); // Sudut membulat modern
+    
+    private JPanel Card(String deskripsiJudul, JLabel labelNilai, JPanel iconPanel) {
+        JPanel kartu = new JPanel(new BorderLayout(15, 0));
+        kartu.setBackground(Color.WHITE);
+        kartu.setOpaque(true);
+        kartu.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        kartu.putClientProperty(FlatClientProperties.STYLE, "arc: 16; background: #ffffff;");
         
-        titleLabel.setFont(new java.awt.Font("Segoe UI", 0, 14));
-        titleLabel.setForeground(new java.awt.Color(120, 130, 140));
+        JLabel lblDeskripsi = new JLabel(deskripsiJudul);
+        lblDeskripsi.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 13));
+        lblDeskripsi.setForeground(new Color(100, 116, 139)); // Slate 500
         
-        valueLabel.setFont(new java.awt.Font("Segoe UI", 1, 24));
-        valueLabel.setForeground(new java.awt.Color(33, 44, 62));
+        labelNilai.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 26));
+        labelNilai.setForeground(new Color(15, 23, 42)); // Slate 900
         
-        javax.swing.JPanel textPanel = new javax.swing.JPanel(new java.awt.GridLayout(2, 1, 0, 5));
+        JPanel textPanel = new JPanel(new GridLayout(2, 1, 0, 4));
         textPanel.setOpaque(false);
-        textPanel.add(titleLabel);
-        textPanel.add(valueLabel);
+        textPanel.add(lblDeskripsi);
+        textPanel.add(labelNilai);
         
         iconPanel.setOpaque(false);
         
-        borderLabel.setVisible(false);
-        
-        kartu.add(textPanel, java.awt.BorderLayout.CENTER);
-        kartu.add(iconPanel, java.awt.BorderLayout.EAST);
+        kartu.add(textPanel, BorderLayout.CENTER);
+        kartu.add(iconPanel, BorderLayout.EAST);
         
         return kartu;
     }
@@ -122,7 +153,7 @@ public final class dashboard extends javax.swing.JPanel {
     public void tampilkanTotalStokBarang() {
         double totalStok = controller.hitungTotalStok();
         txtTotalStok.setText(String.format("%,.0f Kg", totalStok));
-    }   
+    } 
     
     public void tampilkanTotalBarangMasuk() {
         double totalMasuk = controller.hitungTotalBarangMasuk();
@@ -132,119 +163,112 @@ public final class dashboard extends javax.swing.JPanel {
     public void tampilkanTotalBarangKeluar() {
         double totalKeluar = controller.hitungTotalBarangKeluar();
         lblTotalBarangKeluar.setText(String.format("%,.0f Kg", totalKeluar));
-    }
+    }  
     
-    
-   public void loadDataTabel() {
-    String[] namaKolom = {"ID Barang", "Grade Kopi", "Stok", "Harga / Kg (Rp)", "Status"};
-    DefaultTableModel model = new DefaultTableModel(namaKolom, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-
-    List<InventarisKopi> listKopi = kopiController.getAllInventaris();
-    for (InventarisKopi k : listKopi) {
-        String stokFormat = String.format("%.0f Kg", k.getStok());
-        String hargaFormat = String.format("%,.0f", k.getHargaPerKg());
-
-        Object[] baris = {
-            k.getIdBarang(),
-            k.getGradeKopi(),
-            stokFormat,
-            hargaFormat,
-            k.getStatus()
-        };
-        model.addRow(baris);
-    }
-    tblBarang.setModel(model);  
-
-    tblBarang.setShowHorizontalLines(true);
-    tblBarang.setShowVerticalLines(true);
-    tblBarang.setGridColor(new java.awt.Color(225, 230, 238)); 
-    tblBarang.setIntercellSpacing(new java.awt.Dimension(1, 1));
-    tblBarang.setRowHeight(40); 
-
-    tblBarang.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
-        @Override
-        public java.awt.Component getTableCellRendererComponent(
-                javax.swing.JTable table, Object value, boolean isSelected, 
-                boolean hasFocus, int row, int column) {
-            
-            java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            c.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-            
-            if (!isSelected) {
-                if (row % 2 == 0) {
-                    c.setBackground(java.awt.Color.WHITE); 
-                } else {
-                    c.setBackground(new java.awt.Color(244, 246, 249)); 
-                }
-                c.setForeground(new java.awt.Color(51, 51, 51));
-            }
-            return c;
-        }
-    });
-
-    tblBarang.getColumnModel().getColumn(4).setCellRenderer(new javax.swing.table.TableCellRenderer() {
-        private final javax.swing.JLabel labelText = new javax.swing.JLabel("", javax.swing.SwingConstants.CENTER);
-        private final javax.swing.JPanel panelBadge = new javax.swing.JPanel(new java.awt.GridBagLayout()) {
+    public void loadDataTabel() {
+        String[] namaKolom = {"ID Barang", "Grade Kopi", "Stok", "Harga / Kg (Rp)", "Status"};
+        DefaultTableModel model = new DefaultTableModel(namaKolom, 0) {
             @Override
-            protected void paintComponent(java.awt.Graphics g) {
-                super.paintComponent(g);
-                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
-                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                String statusText = labelText.getText();
-                if (statusText.equalsIgnoreCase("stok normal")) {
-                    g2.setColor(new java.awt.Color(16, 171, 119)); 
-                } else if (statusText.equalsIgnoreCase("stok rendah")) {
-                    g2.setColor(new java.awt.Color(217, 131, 12)); 
-                } else {
-                    g2.setColor(new java.awt.Color(219, 68, 85));  
-                }
-                
-                int badgeHeight = getHeight() - 14;
-                int badgeWidth = getWidth() - 30;
-                int x = (getWidth() - badgeWidth) / 2;
-                int y = (getHeight() - badgeHeight) / 2;
-                g2.fillRoundRect(x, y, badgeWidth, badgeHeight, badgeHeight, badgeHeight);
-                g2.dispose();
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
 
-        {
-            labelText.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-            labelText.setForeground(java.awt.Color.WHITE);
-            panelBadge.add(labelText);
-        }
+        List<InventarisKopi> listKopi = kopiController.getAllInventaris();
+        for (InventarisKopi k : listKopi) {
+            String stokFormat = String.format("%.0f Kg", k.getStok());
+            String hargaFormat = String.format("%,.0f", k.getHargaPerKg());
 
-        @Override
-        public java.awt.Component getTableCellRendererComponent(
-                javax.swing.JTable table, Object value, boolean isSelected, 
-                boolean hasFocus, int row, int column) {
-            
-            String status = (value != null) ? value.toString() : "";
-            labelText.setText(status.toLowerCase()); 
-       
-            if (!isSelected) {
-                if (row % 2 == 0) {
-                    panelBadge.setBackground(java.awt.Color.WHITE);
+            Object[] baris = {
+                k.getIdBarang(),
+                k.getGradeKopi(),
+                stokFormat,
+                hargaFormat,
+                k.getStatus()
+            };
+            model.addRow(baris);
+        }
+        tblBarang.setModel(model);  
+
+        tblBarang.setRowHeight(44); 
+        tblBarang.setShowHorizontalLines(true);
+        tblBarang.setShowVerticalLines(false); 
+        tblBarang.setGridColor(new Color(241, 245, 249)); 
+        tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 13));
+        tblBarang.setSelectionBackground(new Color(239, 246, 255)); 
+        tblBarang.setSelectionForeground(new Color(29, 78, 216));
+
+        javax.swing.table.JTableHeader header = tblBarang.getTableHeader();
+        header.setFont(new java.awt.Font("Segoe UI", Font.BOLD, 13)); 
+        header.setBackground(new Color(248, 250, 252)); 
+        header.setForeground(new Color(71, 85, 105)); 
+        header.setOpaque(true);
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(226, 232, 240)));
+
+        tblBarang.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                if (column == 1) {
+                    setHorizontalAlignment(SwingConstants.LEFT); 
                 } else {
-                    panelBadge.setBackground(new java.awt.Color(244, 246, 249));
+                    setHorizontalAlignment(SwingConstants.CENTER); 
                 }
-            } else {
-                panelBadge.setBackground(table.getSelectionBackground());
+                
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
+                    c.setForeground(new Color(51, 65, 85));
+                }
+                setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+                return c;
             }
-            
-            return panelBadge;
-        }
-    });
+        });
 
-    ((DefaultTableModel)tblBarang.getModel()).fireTableDataChanged();
-}
+        tblBarang.getColumnModel().getColumn(4).setCellRenderer(new javax.swing.table.TableCellRenderer() {
+            private final JLabel labelText = new JLabel("", SwingConstants.CENTER);
+            private final JPanel panelBadge = new JPanel(new BorderLayout());
+
+            {
+                labelText.setOpaque(true);
+                labelText.setHorizontalAlignment(SwingConstants.CENTER);
+                labelText.putClientProperty("FlatLaf.style", "arc: 12; font: bold 11 Segoe UI;"); 
+                panelBadge.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+                panelBadge.add(labelText, BorderLayout.CENTER);
+            }
+
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (!isSelected) {
+                    panelBadge.setBackground(row % 2 == 0 ? Color.WHITE : new Color(250, 251, 253));
+                } else {
+                    panelBadge.setBackground(table.getSelectionBackground());
+                }
+
+                if (value != null) {
+                    String statusText = value.toString().trim().toLowerCase();
+                    labelText.setText(statusText.toUpperCase());
+
+                    if (statusText.contains("normal")) {
+                        labelText.setBackground(new Color(220, 252, 231)); 
+                        labelText.setForeground(new Color(21, 128, 61));  
+                    } else if (statusText.contains("rendah")) {
+                        labelText.setBackground(new Color(254, 243, 199)); 
+                        labelText.setForeground(new Color(180, 83, 9));    
+                    } else {
+                        labelText.setBackground(new Color(254, 226, 226)); 
+                        labelText.setForeground(new Color(185, 28, 28));   
+                    }
+                } else {
+                    labelText.setText("");
+                }
+                return panelBadge;
+            }
+        });
+
+        ((DefaultTableModel)tblBarang.getModel()).fireTableDataChanged();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -293,16 +317,16 @@ public final class dashboard extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(211, 211, 211));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/dashboard/totalproduk.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/totalproduk.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel2)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,7 +340,7 @@ public final class dashboard extends javax.swing.JPanel {
         jPanel5.setBackground(new java.awt.Color(211, 211, 211));
 
         jLabel7.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/dashboard/brgkeluar.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgkeluar.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -342,16 +366,16 @@ public final class dashboard extends javax.swing.JPanel {
         jPanel6.setBackground(new java.awt.Color(211, 211, 211));
 
         jLabel9.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/dashboard/brgmasuk.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgmasuk.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addComponent(jLabel9)
-                .addGap(24, 24, 24))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -18,23 +18,36 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {  
     
     initComponents();
-    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);   
+    
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);  
+    
         contentPanel.revalidate();
         contentPanel.repaint();
+
+        try {    
         
-   //load icon
-    try {    
-        btnDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/dashboard.png")));
-        btnBarangMasuk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/brgmasuk.png")));
-        btnBarangKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/brgkeluar.png")));
-        btnLaporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/laporan.png")));
-        btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/keluar.png")));
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/gudangkopi/assets/logo.png")));    
+            ClassLoader classLoader = MainFrame.class.getClassLoader();
+            
+            btnDashboard.setIcon(new com.formdev.flatlaf.extras.FlatSVGIcon("assets/SideBar/Dashboard.svg", classLoader).derive(25, 25));
+            btnBarangMasuk.setIcon(new com.formdev.flatlaf.extras.FlatSVGIcon("assets/SideBar/BarangMasuk.svg", classLoader).derive(25, 25));
+            btnBarangKeluar.setIcon(new com.formdev.flatlaf.extras.FlatSVGIcon("assets/SideBar/BarangKeluar.svg", classLoader).derive(25, 25));
+            btnLaporan.setIcon(new com.formdev.flatlaf.extras.FlatSVGIcon("assets/SideBar/Laporan.svg", classLoader).derive(25, 25));
+            btnKeluar.setIcon(new com.formdev.flatlaf.extras.FlatSVGIcon("assets/SideBar/Keluar.svg", classLoader).derive(25, 25));
+
+            java.net.URL logoURL = classLoader.getResource("assets/SideBar/Logo.png");
+            if (logoURL != null) {
+                javax.swing.ImageIcon imageIcon = new javax.swing.ImageIcon(logoURL);
+                java.awt.Image image = imageIcon.getImage(); 
+                java.awt.Image newImg = image.getScaledInstance(80, 80, java.awt.Image.SCALE_SMOOTH); 
+                lblLogo.setIcon(new javax.swing.ImageIcon(newImg));      
+            } else {
+                System.err.println("File Logo.png tidak ditemukan lewat ClassLoader!");
+            }
         } catch (Exception e) {
-            System.err.println("Gagal memuat aset: " + e.getMessage());         
-       
-          }
-     
+            System.err.println("Gagal memuat aset GUI menggunakan ClassLoader!");
+            e.printStackTrace();
+        }                 
+   
     // jarak antar icon dan teks 
         btnDashboard.setIconTextGap(10);
         btnBarangMasuk.setIconTextGap(10);
@@ -100,8 +113,8 @@ public class MainFrame extends javax.swing.JFrame {
         contentPanel = new javax.swing.JPanel();
         pageDashBoard = new com.mycompany.gudangkopi.view.dashboard();
         pageBarangKeluar = new com.mycompany.gudangkopi.view.barangKeluar();
-        pageLaporan = new com.mycompany.gudangkopi.view.laporan();
         pageBarangMasuk = new com.mycompany.gudangkopi.view.barangMasuk();
+        pageLaporan = new com.mycompany.gudangkopi.view.laporan();
         sidebarPanel = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         btnDashboard = new javax.swing.JButton();
@@ -119,13 +132,13 @@ public class MainFrame extends javax.swing.JFrame {
         contentPanel.setLayout(new java.awt.CardLayout());
         contentPanel.add(pageDashBoard, "dashboard");
         contentPanel.add(pageBarangKeluar, "barang_keluar");
-        contentPanel.add(pageLaporan, "Laporan");
         contentPanel.add(pageBarangMasuk, "barang_masuk");
+        contentPanel.add(pageLaporan, "Laporan");
 
         getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
 
         sidebarPanel.setBackground(new java.awt.Color(33, 44, 62));
-        sidebarPanel.setPreferredSize(new java.awt.Dimension(345, 0));
+        sidebarPanel.setPreferredSize(new java.awt.Dimension(278, 0));
 
         menuPanel.setBackground(new java.awt.Color(33, 44, 62));
         menuPanel.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
@@ -133,7 +146,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.setLayout(new java.awt.GridLayout(0, 1, 0, 4));
 
         btnDashboard.setBackground(new java.awt.Color(33, 44, 62));
-        btnDashboard.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        btnDashboard.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         btnDashboard.setForeground(new java.awt.Color(255, 255, 255));
         btnDashboard.setText("Dashboard");
         btnDashboard.setBorder(null);
@@ -145,7 +158,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnDashboard);
 
         btnBarangMasuk.setBackground(new java.awt.Color(33, 44, 62));
-        btnBarangMasuk.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        btnBarangMasuk.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         btnBarangMasuk.setForeground(new java.awt.Color(255, 255, 255));
         btnBarangMasuk.setText("Barang Masuk");
         btnBarangMasuk.setBorder(null);
@@ -157,7 +170,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnBarangMasuk);
 
         btnBarangKeluar.setBackground(new java.awt.Color(33, 44, 62));
-        btnBarangKeluar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        btnBarangKeluar.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         btnBarangKeluar.setForeground(new java.awt.Color(255, 255, 255));
         btnBarangKeluar.setText("Barang Keluar");
         btnBarangKeluar.setBorder(null);
@@ -168,7 +181,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnBarangKeluar);
 
         btnLaporan.setBackground(new java.awt.Color(33, 44, 62));
-        btnLaporan.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        btnLaporan.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         btnLaporan.setForeground(new java.awt.Color(255, 255, 255));
         btnLaporan.setText("Laporan Transaksi");
         btnLaporan.setBorder(null);
@@ -179,12 +192,12 @@ public class MainFrame extends javax.swing.JFrame {
         menuPanel.add(btnLaporan);
 
         btnKeluar.setBackground(new java.awt.Color(33, 44, 62));
-        btnKeluar.setFont(new java.awt.Font("Roboto Slab", 0, 18)); // NOI18N
+        btnKeluar.setFont(new java.awt.Font("Roboto Slab", 0, 12)); // NOI18N
         btnKeluar.setForeground(new java.awt.Color(255, 255, 255));
         btnKeluar.setText("Keluar");
         btnKeluar.addActionListener(this::btnKeluarActionPerformed);
 
-        lblLogo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblLogo.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         lblLogo.setForeground(new java.awt.Color(255, 255, 255));
         lblLogo.setText("Gudang Kopi Pak Parman");
 
@@ -194,20 +207,20 @@ public class MainFrame extends javax.swing.JFrame {
         sidebarPanel.setLayout(sidebarPanelLayout);
         sidebarPanelLayout.setHorizontalGroup(
             sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                    .addComponent(btnKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(20, 20, 20))
             .addGroup(sidebarPanelLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(menuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSeparator1)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblLogo)
-                .addGap(38, 38, 38))
+            .addGroup(sidebarPanelLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         sidebarPanelLayout.setVerticalGroup(
             sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,12 +228,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(lblLogo)
                 .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53)
+                .addComponent(menuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 205, Short.MAX_VALUE)
+                .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         getContentPane().add(sidebarPanel, java.awt.BorderLayout.WEST);
