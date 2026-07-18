@@ -287,7 +287,7 @@ public class barangKeluar extends javax.swing.JPanel {
         String tanggal = String.valueOf(modelTabel.getValueAt(baris, 1));
         String gradeKopi = String.valueOf(modelTabel.getValueAt(baris, 2));
         String jumlah = String.valueOf(modelTabel.getValueAt(baris, 3));
-        String supplier = String.valueOf(modelTabel.getValueAt(baris, 4));
+        String pembeli = String.valueOf(modelTabel.getValueAt(baris, 4));
         String status = String.valueOf(modelTabel.getValueAt(baris, 5));
 
         Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
@@ -320,8 +320,8 @@ public class barangKeluar extends javax.swing.JPanel {
         String[][] dataInfo = {
             {"Tanggal Keluar", tanggal},
             {"Grade Kopi", gradeKopi},
-            {"Jumlah Masuk", jumlah + " Kg"},
-            {"Nama Supplier", supplier}
+            {"Jumlah Keluar", jumlah + " Kg"},
+            {"Pembeli", pembeli}
         };
 
         Font fontLabel = new Font("Segoe UI", Font.PLAIN, 13);
