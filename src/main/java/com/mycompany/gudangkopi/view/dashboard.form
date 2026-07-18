@@ -231,7 +231,7 @@
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/totalproduk.png"/>
+              <Image iconType="3" name="/assets/dashboard/totalproduk.png"/>
             </Property>
           </Properties>
         </Component>
@@ -279,7 +279,7 @@
               <Color blue="ff" green="cc" red="cc" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgkeluar.png"/>
+              <Image iconType="3" name="/assets/dashboard/brgkeluar.png"/>
             </Property>
           </Properties>
         </Component>
@@ -335,7 +335,7 @@
               <Color blue="ff" green="cc" red="cc" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgmasuk.png"/>
+              <Image iconType="3" name="/assets/dashboard/brgmasuk.png"/>
             </Property>
           </Properties>
         </Component>

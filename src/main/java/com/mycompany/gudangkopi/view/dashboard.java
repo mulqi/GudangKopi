@@ -317,7 +317,7 @@ public final class dashboard extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(211, 211, 211));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/totalproduk.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/dashboard/totalproduk.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -340,7 +340,7 @@ public final class dashboard extends javax.swing.JPanel {
         jPanel5.setBackground(new java.awt.Color(211, 211, 211));
 
         jLabel7.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel7.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgkeluar.png")); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/dashboard/brgkeluar.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -366,7 +366,7 @@ public final class dashboard extends javax.swing.JPanel {
         jPanel6.setBackground(new java.awt.Color(211, 211, 211));
 
         jLabel9.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel9.setIcon(new javax.swing.ImageIcon("/media/mulqi/Data/coding/Dev/Tubes/mulqi/GudangKopi/src/main/resources/assets/dashboard/brgmasuk.png")); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/dashboard/brgmasuk.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
