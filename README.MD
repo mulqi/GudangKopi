@@ -78,7 +78,7 @@ Ensure the following dependencies are present in your pom.xml:
 1. Clone the repository: 
 
 ````
-git clone https://github.com/username/GudangKopi.git
+git clone https://github.com/mulqi/GudangKopi.git
 
 cd GudangKopi
 ````
