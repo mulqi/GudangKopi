@@ -69,12 +69,12 @@ Ensure the following dependencies are present in your pom.xml:
     </dependency>
 ---
 
-## Getting Started
+# Getting Started
 * Prerequisites
 * JDK 17 or higher
 * Apache Maven
 
-# Installation & Build
+## Installation & Build
 1. Clone the repository: 
 
 ````
@@ -94,7 +94,7 @@ mvn clean compile
 ````
 mvn exec:java -Dexec.mainClass="com.mycompany.gudangkopi.GudangKopi"
 ````
-# Core Modules
+## Core Modules
 * Dashboard: summary of current warehouse operations.
 
 * Incoming Goods (Barang Masuk): Module to record new stock items entering the warehouse.
