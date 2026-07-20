@@ -6,7 +6,7 @@ A Java Swing desktop application designed for managing coffee warehouse inventor
 
 ## Technical Stack
 
-* **Language:** Java (JDK 17+)
+* **Language:** Java (JDK 24+)
 * **GUI Framework:** Java Swing
 * **UI Theme & Utilities:** [FlatLaf](https://www.formdev.com/flatlaf/) and `flatlaf-extras`
 * **Database Connection:** MySQL / JDBC (`Koneksi.java`)
@@ -71,7 +71,7 @@ Ensure the following dependencies are present in your pom.xml:
 
 # Getting Started
 * Prerequisites
-* JDK 17 or higher
+* JDK 24 or higher
 * Apache Maven
 
 ## Installation & Build
