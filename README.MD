@@ -25,6 +25,17 @@ GudangKopi/
 │       │        ├── GudangKopi.java
 │       │        ├── config/
 │       │        │   └── Koneksi.java
+│       │        ├── controller/
+│       │            ├── BarangController.java
+│       │            ├── BarangKeluarController.java
+│       │            ├── BarangMasukController.java
+│       │            ├── inventarisKopiController.java
+│       │            └── LaporanController.java
+│       │        ├── model/
+│       │            ├── Inventaris.java
+│       │            ├── ModelBarangKeluar.java
+│       │            ├── ModelBarangMasuk.java
+│       │            └── ModelLaporan.java
 │       │        └── view/
 │       │            ├── MainFrame.java
 │       │            ├── dashboard.java
