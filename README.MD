@@ -14,48 +14,6 @@ A Java Swing desktop application designed for managing coffee warehouse inventor
 
 ---
 
-## Directory Structure
-
-```text
-GudangKopi/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/mycompany/gudangkopi/
-│       │        ├── GudangKopi.java
-│       │        ├── config/
-│       │        │   └── Koneksi.java
-│       │        ├── controller/
-│       │            ├── BarangController.java
-│       │            ├── BarangKeluarController.java
-│       │            ├── BarangMasukController.java
-│       │            ├── inventarisKopiController.java
-│       │            └── LaporanController.java
-│       │        ├── model/
-│       │            ├── Inventaris.java
-│       │            ├── ModelBarangKeluar.java
-│       │            ├── ModelBarangMasuk.java
-│       │            └── ModelLaporan.java
-│       │        └── view/
-│       │            ├── MainFrame.java
-│       │            ├── dashboard.java
-│       │            ├── barangMasuk.java
-│       │            ├── barangKeluar.java
-│       │            └── laporan.java
-│       └── resources/
-│           └── assets/
-│               └── SideBar/
-│                   ├── Logo.png
-│                   ├── Dashboard.svg
-│                   ├── BarangMasuk.svg
-│                   ├── BarangKeluar.svg
-│                   ├── Laporan.svg
-│                   └── Keluar.svg
-├── pom.xml
-└── README.md
-
-```
-
 ## Dependencies (pom.xml)
 Ensure the following dependencies are present in your pom.xml:
 
