@@ -193,15 +193,19 @@ public class barangKeluar extends javax.swing.JPanel {
                     String status = value.toString().trim().toUpperCase();
                     labelText.setText(status);
 
-                    if (status.equals("SELESAI") || status.equals("MASUK")) {
-                        labelText.setBackground(new Color(220, 252, 231)); 
-                        labelText.setForeground(new Color(21, 128, 61));
-                    } else if (status.equals("DITOLAK") || status.equals("KELUAR")) {
-                        labelText.setBackground(new Color(254, 226, 226)); 
-                        labelText.setForeground(new Color(185, 28, 28));
-                    } else {
-                        labelText.setBackground(new Color(254, 243, 199));
-                        labelText.setForeground(new Color(180, 83, 9));
+                    switch (status) {
+                        case "SELESAI", "MASUK" -> {
+                            labelText.setBackground(new Color(220, 252, 231));
+                            labelText.setForeground(new Color(21, 128, 61));
+                        }
+                        case "DITOLAK", "KELUAR" -> {
+                            labelText.setBackground(new Color(254, 226, 226));
+                            labelText.setForeground(new Color(185, 28, 28));
+                        }
+                        default -> {
+                            labelText.setBackground(new Color(254, 243, 199));
+                            labelText.setForeground(new Color(180, 83, 9));
+                        }
                     }
                 } else {
                     labelText.setText("");
@@ -219,15 +223,12 @@ public class barangKeluar extends javax.swing.JPanel {
                     searchTimerKeluar.stop();
                 }
 
-                searchTimerKeluar = new javax.swing.Timer(200, new java.awt.event.ActionListener() {
-                    @Override
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        String keyword = Cari.getText().trim();
-                        if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
-                            cb.tampilkanData(modelTabel);
-                        } else {
-                            cb.cariBarangKeluar(modelTabel, keyword);
-                        }
+                searchTimerKeluar = new javax.swing.Timer(200, (java.awt.event.ActionEvent e) -> {
+                    String keyword = Cari.getText().trim();
+                    if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
+                        cb.tampilkanData(modelTabel);
+                    } else {
+                        cb.cariBarangKeluar(modelTabel, keyword);
                     }
                 });
                 searchTimerKeluar.setRepeats(false);
@@ -272,7 +273,23 @@ public class barangKeluar extends javax.swing.JPanel {
         }
     }
     
-     private void tampilkanDetail() {
+    private void refreshAllViews() {
+    triggerDashboardRefresh();
+    java.awt.Container parent = this.getParent();
+    while (parent != null) {
+        if (parent instanceof javax.swing.JComponent jComponent) {
+            for (java.awt.Component comp : jComponent.getComponents()) {
+                if (comp instanceof com.mycompany.gudangkopi.view.laporan) {
+                    ((com.mycompany.gudangkopi.view.laporan) comp).refreshLaporanData();
+                    break;
+                }
+            }
+        }
+        parent = parent.getParent();
+    }
+}
+    
+    private void tampilkanDetail() {
         int baris = tblKeluar.getSelectedRow();
 
         if (baris == -1) {
@@ -575,7 +592,7 @@ public class barangKeluar extends javax.swing.JPanel {
         dialog.setVisible(true);
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel);
-            triggerDashboardRefresh();
+            refreshAllViews();
         }
     }//GEN-LAST:event_btnInputBarangKeluarActionPerformed
 
@@ -594,7 +611,7 @@ public class barangKeluar extends javax.swing.JPanel {
             if (cb.hapusBarangKeluar(id)) {
                 JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
                 cb.tampilkanData(modelTabel);
-                triggerDashboardRefresh();
+                refreshAllViews();
             } else {
                 JOptionPane.showMessageDialog(this, "Data gagal dihapus.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -640,7 +657,7 @@ public class barangKeluar extends javax.swing.JPanel {
 
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel);
-            triggerDashboardRefresh();
+            refreshAllViews();
         }
     }//GEN-LAST:event_btnUbahActionPerformed
 

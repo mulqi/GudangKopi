@@ -23,7 +23,6 @@ public class barangMasuk extends javax.swing.JPanel {
     DefaultTableModel modelTabel;
     private dashboard dash;
     private javax.swing.Timer searchTimer;
-
     /**
      * Creates new form barangMasuk
      * 
@@ -150,15 +149,12 @@ public class barangMasuk extends javax.swing.JPanel {
                         searchTimer.stop();
                     }
                     
-                    searchTimer = new javax.swing.Timer(200, new java.awt.event.ActionListener() {
-                        @Override
-                        public void actionPerformed(java.awt.event.ActionEvent e) {
-                            String keyword = kpencarian.getText().trim();
-                            if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
-                                cb.tampilkanData(modelTabel); 
-                            } else {
-                                cb.cariBarangMasuk(modelTabel, keyword); 
-                            }
+                    searchTimer = new javax.swing.Timer(200, (java.awt.event.ActionEvent e) -> {
+                        String keyword = kpencarian.getText().trim();
+                        if (keyword.isEmpty() || keyword.equalsIgnoreCase("SEARCH") || keyword.equals("Search...")) {
+                            cb.tampilkanData(modelTabel);
+                        } else {
+                            cb.cariBarangMasuk(modelTabel, keyword);
                         }
                     });
                     searchTimer.setRepeats(false); 
@@ -248,15 +244,19 @@ public class barangMasuk extends javax.swing.JPanel {
                     String status = value.toString().trim().toUpperCase();
                     labelText.setText(status);
 
-                    if (status.equals("MASUK") || status.equals("SELESAI")) {
-                        labelText.setBackground(new Color(220, 252, 231)); 
-                        labelText.setForeground(new Color(21, 128, 61));  
-                    } else if (status.equals("KELUAR") || status.equals("DITOLAK")) {
-                        labelText.setBackground(new Color(254, 226, 226)); 
-                        labelText.setForeground(new Color(185, 28, 28));  
-                    } else {
-                        labelText.setBackground(new Color(254, 243, 199));
-                        labelText.setForeground(new Color(180, 83, 9));    
+                    switch (status) {
+                        case "MASUK", "SELESAI" -> {
+                            labelText.setBackground(new Color(220, 252, 231));
+                            labelText.setForeground(new Color(21, 128, 61));
+                        }
+                        case "KELUAR", "DITOLAK" -> {
+                            labelText.setBackground(new Color(254, 226, 226));    
+                            labelText.setForeground(new Color(185, 28, 28));
+                        }
+                        default -> {
+                            labelText.setBackground(new Color(254, 243, 199));
+                            labelText.setForeground(new Color(180, 83, 9));
+                        }
                     }
                 } else {
                     labelText.setText("");
@@ -274,8 +274,8 @@ public class barangMasuk extends javax.swing.JPanel {
         if (dash == null) {
             java.awt.Container parent = this.getParent();
             while (parent != null) {
-                if (parent instanceof javax.swing.JComponent) {
-                    for (java.awt.Component comp : ((javax.swing.JComponent) parent).getComponents()) {
+                if (parent instanceof javax.swing.JComponent jComponent) {
+                    for (java.awt.Component comp : jComponent.getComponents()) {
                         if (comp instanceof com.mycompany.gudangkopi.view.dashboard) {
                             dash = (com.mycompany.gudangkopi.view.dashboard) comp;
                             break;
@@ -291,6 +291,22 @@ public class barangMasuk extends javax.swing.JPanel {
             dash.refreshDashboardData(); 
         }
     }
+    
+    private void refreshAllViews() {
+    triggerDashboardRefresh();
+    java.awt.Container parent = this.getParent();
+    while (parent != null) {
+        if (parent instanceof javax.swing.JComponent jComponent) {
+            for (java.awt.Component comp : jComponent.getComponents()) {
+                if (comp instanceof com.mycompany.gudangkopi.view.laporan) {
+                    ((com.mycompany.gudangkopi.view.laporan) comp).refreshLaporanData();
+                    break;
+                }
+            }
+        }
+        parent = parent.getParent();
+    }
+}
         
     private void tampilkanDetail() {
         int baris = tblMasuk.getSelectedRow();
@@ -659,7 +675,7 @@ public class barangMasuk extends javax.swing.JPanel {
             if (cb.hapusBarangMasuk(id)) {
                 JOptionPane.showMessageDialog(this, "Data berhasil dihapus.");
                 cb.tampilkanData(modelTabel);
-                triggerDashboardRefresh();
+                refreshAllViews();
             } else {
                 JOptionPane.showMessageDialog(this, "Data gagal dihapus.");
             }
@@ -677,7 +693,7 @@ public class barangMasuk extends javax.swing.JPanel {
 
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel); 
-            triggerDashboardRefresh();    
+            refreshAllViews();    
         }
     }//GEN-LAST:event_btnInputBarangMasukActionPerformed
 
@@ -710,7 +726,7 @@ public class barangMasuk extends javax.swing.JPanel {
 
         if (dialog.isDataTersimpan()) {
             cb.tampilkanData(modelTabel);
-            triggerDashboardRefresh();
+            refreshAllViews();
         }
     }//GEN-LAST:event_btnubahActionPerformed
 
@@ -845,6 +861,7 @@ public class barangMasuk extends javax.swing.JPanel {
      * karena data transaksi (tanggal, grade, jumlah, supplier) yang sudah
      * tercatat tidak boleh diubah, yang boleh berubah cuma statusnya saja.
      */
+    
     private static class UbahBarangMasukDialog extends JDialog {
 
         private final JTextField txtTanggal = new JTextField();
